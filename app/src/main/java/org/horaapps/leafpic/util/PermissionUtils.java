@@ -27,7 +27,7 @@ public final class PermissionUtils {
     }
 
     public static boolean isDeviceInfoGranted(Context context) {
-        return checkPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
+        return checkPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) && checkPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     public static void requestPermissions(Object o, int permissionId, String... permissions) {

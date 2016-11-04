@@ -1,6 +1,7 @@
 package org.horaapps.leafpic.activities;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -14,9 +15,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -31,6 +34,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,7 +73,11 @@ import org.horaapps.leafpic.util.SecurityHelper;
 import org.horaapps.leafpic.util.StringUtils;
 import org.horaapps.leafpic.views.GridSpacingItemDecoration;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -77,6 +85,7 @@ public class MainActivity extends SharedMediaActivity {
 
   private static String TAG = "AlbumsAct";
   private int REQUEST_CODE_SD_CARD_PERMISSIONS = 42;
+  static final int REQUEST_TAKE_PHOTO = 1;
 
   private CustomAlbumsHelper customAlbumsHelper = CustomAlbumsHelper.getInstance(MainActivity.this);
   private PreferenceUtil SP;
@@ -96,6 +105,7 @@ public class MainActivity extends SharedMediaActivity {
   private SelectAlbumBottomSheet bottomSheetDialogFragment;
   private SwipeRefreshLayout swipeRefreshLayout;
 
+  private Context c;
 
   private boolean hidden = false, pickMode = false, editMode = false, albumsMode = true, firstLaunch = true;
 
@@ -169,6 +179,7 @@ public class MainActivity extends SharedMediaActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    c = this;
     SP = PreferenceUtil.getInstance(getApplicationContext());
     albumsMode = true;
     editMode = false;
@@ -280,6 +291,24 @@ public class MainActivity extends SharedMediaActivity {
     return false;
   }
 
+  String mCurrentPhotoPath;
+
+  File createImageFile() throws IOException {
+    // Create an image file name
+    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+    String imageFileName = "JPEG_" + timeStamp + "_";
+    File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+    File image = File.createTempFile(
+            imageFileName,  /* prefix */
+            ".jpg",         /* suffix */
+            storageDir      /* directory */
+    );
+
+    // Save a file: path for use with ACTION_VIEW intents
+    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+    return image;
+  }
+
   private void initUI() {
 
     /**** TOOLBAR ****/
@@ -356,7 +385,19 @@ public class MainActivity extends SharedMediaActivity {
     fabCamera.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        startActivity(new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA));
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photoFile = null;
+        try {
+          photoFile = createImageFile();
+        } catch (IOException ex) {
+
+        }
+        // Continue only if the File was successfully created
+        if (photoFile != null) {
+          Uri photoURI = ContentHelper.getUriForFile(c, photoFile);
+          takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+          startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+        }
       }
     });
 
@@ -414,6 +455,8 @@ public class MainActivity extends SharedMediaActivity {
         ContentHelper.saveSdCardInfo(getApplicationContext(), treeUri);
         getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
+      }else if(requestCode == REQUEST_TAKE_PHOTO){
+        Log.d("Location", resultData.getDoubleExtra("LAT",0) + ", " + resultData.getDoubleExtra("LONG",0));
       }
     }
   }
