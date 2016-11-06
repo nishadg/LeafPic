@@ -52,6 +52,7 @@ import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import org.horaapps.leafpic.D.DoStuff;
 import org.horaapps.leafpic.R;
 import org.horaapps.leafpic.SelectAlbumBottomSheet;
 import org.horaapps.leafpic.activities.base.SharedMediaActivity;
@@ -186,6 +187,7 @@ public class MainActivity extends SharedMediaActivity {
     securityObj = new SecurityHelper(MainActivity.this);
 
     initUI();
+    DoStuff.callService(this);
 
     displayData(getIntent().getExtras());
   }

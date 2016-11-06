@@ -1,4 +1,9 @@
 <resources>
+    <!-- Commons String -->
+    <string name="login">Log in</string>
+    <string name="signup">Sign up</string>
+    <string name="username">Username</string>
+
     <!--LEAF PIC STRING'S-->
     <!--<string name="app_name">LeafPic</string>-->
     <string name="app_light_description">A colorful material gallery.</string>
