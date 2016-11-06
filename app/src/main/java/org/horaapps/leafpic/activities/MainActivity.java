@@ -496,7 +496,7 @@ public class MainActivity extends SharedMediaActivity {
     setNavBarColor();
 
     fabCamera.setBackgroundTintList(ColorStateList.valueOf(getAccentColor()));
-    fabCamera.setVisibility(SP.getBoolean(getString(R.string.preference_show_fab),false) ? View.VISIBLE : View.GONE);
+    fabCamera.setVisibility(SP.getBoolean(getString(R.string.preference_show_fab),true) ? View.VISIBLE : View.GONE);
     setDrawerTheme();
     rvAlbums.setBackgroundColor(getBackgroundColor());
     rvMedia.setBackgroundColor(getBackgroundColor());

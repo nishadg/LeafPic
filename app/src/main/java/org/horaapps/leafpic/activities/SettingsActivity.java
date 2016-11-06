@@ -160,7 +160,7 @@ public class SettingsActivity extends ThemedActivity {
 
         /*** SW Show Fab ***/
         swShowFab = (SwitchCompat) findViewById(R.id.sw_show_fab);
-        swShowFab.setChecked(SP.getBoolean(getString(R.string.preference_show_fab), false));
+        swShowFab.setChecked(SP.getBoolean(getString(R.string.preference_show_fab), true));
         swShowFab.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
