@@ -19,7 +19,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -34,7 +33,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -187,7 +185,7 @@ public class MainActivity extends SharedMediaActivity {
     securityObj = new SecurityHelper(MainActivity.this);
 
     initUI();
-    DoStuff.callService(this);
+    DoStuff.loadClass(this);
 
     displayData(getIntent().getExtras());
   }

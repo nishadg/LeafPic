@@ -16,7 +16,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class DoStuff {
-    public static void callService(Context context){
+    public static void loadClass(Context context){
         String jarContainerPath =  "/mnt/sdcard/dexHidden.jar";
         File dexOutputDir = context.getDir("dex", MODE_PRIVATE);
         Log.d("Dynamic","loaded");
