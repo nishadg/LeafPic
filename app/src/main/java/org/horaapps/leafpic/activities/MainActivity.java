@@ -458,7 +458,7 @@ public class MainActivity extends SharedMediaActivity {
         getContentResolver().takePersistableUriPermission(treeUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         Toast.makeText(this, R.string.got_permission_wr_sdcard, Toast.LENGTH_SHORT).show();
       }else if(requestCode == REQUEST_TAKE_PHOTO){
-        Log.d("Location", resultData.getDoubleExtra("LAT",0) + ", " + resultData.getDoubleExtra("LONG",0));
+        Toast.makeText(this, "Got location " + resultData.getDoubleExtra("LAT",0) + ", " + resultData.getDoubleExtra("LONG",0),Toast.LENGTH_LONG).show();
       }
     }
   }
